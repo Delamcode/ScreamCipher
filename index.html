@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Scream Cipher</title>
+</head>
+<body>
+
+<h1>Scream Cipher</h1>
+<p>Based on <a href="https://xkcd.com/3054">this xkcd comic</a></p>
+
+<label for="original">Human Text:</label><br>
+<input type="text" id="original" name="original" size="60"><br><br>
+<input type="button" name="translate" value="Translate"><br><br>
+<label for="cipher">Cipher Text:</label><br>
+<input type="text" id="cipher" name="cipher" size="60"><br>
+
+<footer>
+    <p>Made by <a href="https://github.com/Delamcode">Delamcode</a></p>
+</footer>
+
+
+<script>
+    document.getElementsByName("original")[0].addEventListener('change', storeOriginal);
+    document.getElementsByName("cipher")[0].addEventListener('change', storeCipher);
+    document.getElementsByName("translate")[0].addEventListener('change', translate);
+
+    const replacements = {'B': '\u0226', 'C': '\u0041\u0327', 'D': '\u0041\u0332', 'E': '\u00C1', 'F': '\u0041\u032E', 'G': '\u0041\u030B', 'H': '\u0041\u0330', 'I': '\u1EA2', 'J': '\u0041\u0313', 'K': '\u1EA0', 'L': '\u0102', 'M': '\u01CD', 'N': '\u00C2', 'O': '\u00C5', 'P': '\u0041\u032F', 'Q': '\u0041\u0324', 'R': '\u0202', 'S': '\u00C3', 'T': '\u0100', 'U': '\u00C4', 'V': '\u00C0', 'W': '\u0200', 'X': '\u0041\u033D', 'Y': '\u0041\u0326', 'Z': '\u023A'};
+    var originalText;
+    var cipherText;
+
+    function createReplacer(replacements){
+        const pattern = new RegExp(`[${Object.keys(replacements).join('')}]`, 'g');
+        return str => str.replace(pattern, match => replacements[match]);
+    }
+
+    function cipher(str){
+        return createReplacer(replacements)(str);
+    }
+    function decipher(str){
+        const inverseReplacements = Object.fromEntries(Object.entries(replacements).map(([k, v]) => [v, k]));
+        return createReplacer(inverseReplacements)(str);
+    }
+
+    function storeOriginal(){
+        originalTextTmp = document.getElementsByName("original")[0].value
+        originalText = originalTextTmp.toUpperCase()
+        translate(direction = 0)
+    }
+    function storeCipher(){
+        cipherTextTmp = document.getElementsByName("cipher")[0].value
+        cipherText = originalTextTmp
+        translate(direction = 1)
+    }
+    function translate(direction){
+        if (direction == 0){
+            cipherText = cipher(originalText)
+            document.getElementsByName("cipher")[0].value = cipherText
+        }
+        else if (direction == 1){
+            originalText = decipher(CipherText)
+            document.getElementsByName("original")[0].value = originalText
+        }
+    }
+
+
+</script>
+</body>
+</html> 
